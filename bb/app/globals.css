@@ -1,5 +1,4 @@
 @import 'tailwindcss';
-@import 'tw-animate-css';
 
 @custom-variant dark (&:is(.dark *));
 
@@ -41,8 +40,9 @@
 }
 
 @theme inline {
-  --font-sans: 'Geist', 'Geist Fallback';
+  --font-sans: 'Inter', sans-serif;
   --font-mono: 'Geist Mono', 'Geist Mono Fallback';
+  --font-syne: 'Syne', sans-serif;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -94,9 +94,17 @@
 }
 
 @layer components {
-  /* Glassmorphism effect */
+  /* Glassmorphism effect - premium layered */
   .glass {
-    @apply bg-white/10 backdrop-blur-md border border-white/20;
+    @apply bg-white/[0.07] backdrop-blur-xl border border-white/20 shadow-xl;
+  }
+
+  .glass-sm {
+    @apply bg-white/[0.05] backdrop-blur-lg border border-white/10;
+  }
+
+  .glass-lg {
+    @apply bg-white/[0.08] backdrop-blur-2xl border border-white/20 shadow-2xl;
   }
 
   /* Neon glow border */
@@ -146,6 +154,22 @@
     animation: pulse-glow 3s ease-in-out infinite;
   }
 
+  /* Smooth glow on hover */
+  @keyframes glow-hover {
+    0% { box-shadow: 0 0 20px rgba(167, 139, 250, 0.2); }
+    100% { box-shadow: 0 0 40px rgba(167, 139, 250, 0.4); }
+  }
+
+  /* Shimmer effect */
+  @keyframes shimmer {
+    0% { background-position: -1000px 0; }
+    100% { background-position: 1000px 0; }
+  }
+
+  .animate-shimmer {
+    animation: shimmer 3s infinite;
+  }
+
   /* Neon button styles */
   .btn-neon {
     @apply relative px-6 py-2.5 font-medium rounded-lg border border-primary/50 text-primary bg-primary/10 hover:bg-primary/20 transition-all duration-200 shadow-[0_0_20px_rgba(167,139,250,0.2)] hover:shadow-[0_0_30px_rgba(167,139,250,0.5)];
@@ -153,6 +177,46 @@
 
   .btn-neon-secondary {
     @apply relative px-6 py-2.5 font-medium rounded-lg border border-secondary/50 text-secondary bg-secondary/10 hover:bg-secondary/20 transition-all duration-200 shadow-[0_0_20px_rgba(96,165,250,0.2)] hover:shadow-[0_0_30px_rgba(96,165,250,0.5)];
+  }
+
+  /* Primary button */
+  .btn-primary {
+    @apply px-6 py-3 bg-gradient-to-r from-purple-600 to-purple-500 hover:from-purple-500 hover:to-purple-400 text-white font-medium rounded-xl transition-all duration-200 shadow-lg shadow-purple-600/30 hover:shadow-purple-600/50 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  /* Ghost button */
+  .btn-ghost {
+    @apply px-6 py-2.5 bg-white/5 border border-white/10 text-slate-200 hover:bg-white/10 rounded-lg transition-all duration-200 font-medium;
+  }
+
+  /* Ghost input */
+  .ghost-input {
+    @apply w-full px-4 py-3 bg-white/5 border border-white/10 text-slate-100 placeholder-slate-500/50 rounded-lg transition-all duration-200 focus:outline-none focus:border-purple-400/30 focus:bg-white/10 focus:shadow-[0_0_20px_rgba(167,139,250,0.1)];
+  }
+
+  /* Category chips */
+  .category-chip {
+    @apply inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium border transition-all duration-200;
+  }
+
+  .chip-compliment {
+    @apply bg-emerald-500/15 text-emerald-400 border-emerald-400/30 hover:bg-emerald-500/25;
+  }
+
+  .chip-confession {
+    @apply bg-red-500/15 text-red-400 border-red-400/30 hover:bg-red-500/25;
+  }
+
+  .chip-crush {
+    @apply bg-pink-500/15 text-pink-400 border-pink-400/30 hover:bg-pink-500/25;
+  }
+
+  .chip-secret {
+    @apply bg-amber-500/15 text-amber-400 border-amber-400/30 hover:bg-amber-500/25;
+  }
+
+  .chip-feedback {
+    @apply bg-blue-500/15 text-blue-400 border-blue-400/30 hover:bg-blue-500/25;
   }
 
   /* Scrollbar styling */

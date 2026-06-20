@@ -32,6 +32,16 @@ const fadeUp = {
   show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: 'easeOut' as const } },
 };
 
+const slideInLeft = {
+  hidden: { opacity: 0, x: -20 },
+  show: { opacity: 1, x: 0, transition: { duration: 0.6, ease: 'easeOut' as const } },
+};
+
+const scaleIn = {
+  hidden: { opacity: 0, scale: 0.95 },
+  show: { opacity: 1, scale: 1, transition: { duration: 0.5, ease: 'easeOut' as const } },
+};
+
 const stagger = {
   hidden: {},
   show: { transition: { staggerChildren: 0.08 } },
@@ -195,70 +205,84 @@ export default function DashboardPage() {
           variants={fadeUp}
           initial="hidden"
           animate="show"
-          className="p-6 rounded-2xl border border-white/5 bg-white/5 backdrop-blur-sm hover:border-purple-400/20 transition-all mb-6"
+          className="glass-lg p-8 rounded-3xl mb-8"
         >
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
             <div>
-              <h1 className="text-2xl font-bold mb-1 text-slate-100" style={{ fontFamily: 'Syne' }}>
-                Welcome back, {userProfile.displayName?.split(' ')[0] || userProfile.username} 👋
+              <h1 className="text-3xl font-extrabold mb-2 text-slate-50" style={{ fontFamily: 'Syne' }}>
+                Welcome back, {userProfile.displayName?.split(' ')[0] || userProfile.username}
               </h1>
-              <p className="text-sm text-slate-400">
-                Share your link to receive anonymous messages
+              <p className="text-slate-400">
+                Your anonymous message link is ready to share
               </p>
             </div>
-            <button
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
               onClick={handleToggleMessages}
               disabled={togglingMessages}
-              className={`text-sm px-4 py-2 rounded-lg border transition-all flex items-center gap-2 shrink-0 ${
+              className={`text-sm px-5 py-2.5 rounded-xl border transition-all flex items-center gap-2 shrink-0 font-medium ${
                 acceptingMessages 
-                  ? 'border-emerald-400/20 text-emerald-400 hover:bg-emerald-400/10' 
-                  : 'border-red-400/20 text-red-400 hover:bg-red-400/10'
+                  ? 'bg-emerald-500/15 border-emerald-400/30 text-emerald-400 hover:bg-emerald-500/25' 
+                  : 'bg-red-500/15 border-red-400/30 text-red-400 hover:bg-red-500/25'
               }`}
+              style={{ fontFamily: 'Syne' }}
             >
               {acceptingMessages ? <Bell className="w-4 h-4" /> : <BellOff className="w-4 h-4" />}
               {acceptingMessages ? 'Accepting' : 'Paused'}
-            </button>
+            </motion.button>
           </div>
 
-          <div className="mt-5 flex flex-col sm:flex-row items-stretch sm:items-center gap-3 p-4 rounded-xl bg-purple-500/5 border border-purple-400/20">
-            <span className="flex-1 truncate text-sm text-purple-400 font-mono">
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="mt-8 flex flex-col sm:flex-row items-stretch sm:items-center gap-4 p-5 rounded-2xl bg-gradient-to-r from-purple-500/10 to-purple-500/5 border border-purple-400/20"
+          >
+            <span className="flex-1 truncate text-sm text-purple-300 font-mono">
               {shareLink}
             </span>
-            <div className="flex items-center gap-2 justify-end">
-              <a
+            <div className="flex items-center gap-2 flex-shrink-0">
+              <motion.a
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.95 }}
                 href={shareLink}
                 target="_blank"
                 rel="noreferrer"
-                className="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 transition-all"
+                className="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-white/10 transition-all"
                 title="Open link"
               >
                 <ExternalLink className="w-4 h-4" />
-              </a>
-              <button
+              </motion.a>
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
                 onClick={handleCopyLink}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm transition-all font-medium ${
+                className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm transition-all font-medium ${
                   copied 
-                    ? 'bg-emerald-500/15 text-emerald-400 border border-emerald-400/30' 
+                    ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-400/30' 
                     : 'bg-purple-500/20 text-purple-400 border border-purple-400/30 hover:bg-purple-500/30'
                 }`}
                 style={{ fontFamily: 'Syne' }}
               >
                 {copied ? (
-                  <><CheckCheck className="w-3.5 h-3.5" /> Copied!</>
+                  <><CheckCheck className="w-4 h-4" /> Copied!</>
                 ) : (
-                  <><Copy className="w-3.5 h-3.5" /> Copy</>
+                  <><Copy className="w-4 h-4" /> Copy</>
                 )}
-              </button>
-              <button
+              </motion.button>
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
                 onClick={handleShare}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm transition-all bg-purple-500/20 text-purple-400 border border-purple-400/30 hover:bg-purple-500/30 font-medium"
+                className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm transition-all bg-purple-500/20 text-purple-400 border border-purple-400/30 hover:bg-purple-500/30 font-medium"
                 style={{ fontFamily: 'Syne' }}
               >
-                <Share2 className="w-3.5 h-3.5" />
+                <Share2 className="w-4 h-4" />
                 Share
-              </button>
+              </motion.button>
             </div>
-          </div>
+          </motion.div>
         </motion.div>
 
         {/* Stats */}
@@ -266,116 +290,166 @@ export default function DashboardPage() {
           variants={stagger}
           initial="hidden"
           animate="show"
-          className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3 mb-6"
+          className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 mb-8"
         >
           {[
-            { label: 'Total', value: stats.total || 0, color: '#A78BFA' },
+            { label: 'Total', value: stats.total || 0, color: '#A78BFA', bg: 'purple' },
             ...MESSAGE_TYPES.map(t => ({
               label: TYPE_CONFIG[t].label,
               value: stats[t] || 0,
-              color: '',
+              color: TYPE_CONFIG[t].label,
+              bg: t,
             }))
           ].map((item, i) => (
             <motion.div
               key={i}
-              variants={fadeUp}
-              className="p-4 rounded-xl border border-white/5 bg-white/5 backdrop-blur-sm text-center"
+              variants={scaleIn}
+              whileHover={{ y: -5 }}
+              className={`glass p-5 rounded-2xl text-center cursor-pointer transition-all ${
+                item.bg === 'purple' ? 'bg-purple-500/10' : 
+                item.bg === 'compliment' ? 'bg-emerald-500/10' :
+                item.bg === 'confession' ? 'bg-red-500/10' :
+                item.bg === 'crush' ? 'bg-pink-500/10' :
+                item.bg === 'secret' ? 'bg-amber-500/10' :
+                'bg-blue-500/10'
+              }`}
             >
-              <div className="text-2xl font-extrabold mb-1 text-slate-100" style={{ fontFamily: 'Syne' }}>
+              <motion.div 
+                className="text-3xl font-extrabold mb-2 text-slate-100" 
+                style={{ fontFamily: 'Syne' }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: i * 0.1 }}
+              >
                 {item.value}
-              </div>
-              <div className="text-xs text-slate-400">{item.label}</div>
+              </motion.div>
+              <div className="text-xs font-medium text-slate-400">{item.label}</div>
             </motion.div>
           ))}
         </motion.div>
 
         {/* Filter + Refresh */}
-        <div className="flex items-center justify-between mb-5 gap-3 flex-wrap">
-          <div className="flex items-center gap-2 flex-wrap">
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+          className="flex items-center justify-between mb-6 gap-4 flex-wrap"
+        >
+          <div className="flex items-center gap-3 flex-wrap">
             <Filter className="w-4 h-4 text-slate-400" />
             {['all', ...MESSAGE_TYPES].map(type => (
-              <button
+              <motion.button
                 key={type}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
                 onClick={() => setFilterType(type)}
-                className={`text-xs px-3 py-1.5 rounded-lg transition-all font-medium capitalize ${
+                className={`text-xs px-4 py-2 rounded-lg transition-all font-medium capitalize ${
                   filterType === type
-                    ? 'bg-purple-500/25 text-purple-400 border border-purple-400/40'
-                    : 'bg-white/5 text-slate-400 border border-white/5 hover:bg-white/10'
+                    ? 'bg-purple-500/25 text-purple-400 border border-purple-400/40 shadow-lg shadow-purple-500/20'
+                    : 'bg-white/5 text-slate-400 border border-white/10 hover:bg-white/10'
                 }`}
                 style={{ fontFamily: 'Syne' }}
               >
                 {type === 'all' ? 'All' : TYPE_CONFIG[type]?.emoji + ' ' + TYPE_CONFIG[type]?.label}
-              </button>
+              </motion.button>
             ))}
           </div>
-          <button
+          <motion.button
+            whileHover={{ rotate: 180 }}
+            transition={{ duration: 0.5 }}
             onClick={fetchMessages}
-            className="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 transition-all"
+            className="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-white/10 transition-all"
             title="Refresh"
           >
             <RefreshCw className={`w-4 h-4 ${fetching ? 'animate-spin' : ''}`} />
-          </button>
-        </div>
+          </motion.button>
+        </motion.div>
 
         {/* Messages */}
         {fetching && messages.length === 0 ? (
-          <div className="text-center py-20">
-            <Ghost className="w-8 h-8 mx-auto animate-pulse mb-3 text-purple-400" />
-            <p className="text-slate-400">Loading messages...</p>
-          </div>
-        ) : messages.length === 0 ? (
-          <motion.div
+          <motion.div 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="text-center py-20"
+            className="text-center py-24"
           >
-            <MessageCircle className="w-12 h-12 mx-auto mb-4 text-purple-400/20" />
-            <h3 className="text-lg font-bold mb-2 text-slate-100" style={{ fontFamily: 'Syne' }}>
+            <motion.div
+              animate={{ rotate: 360 }}
+              transition={{ duration: 3, repeat: Infinity, ease: 'linear' }}
+              className="inline-block mb-4"
+            >
+              <Ghost className="w-12 h-12 text-purple-400" />
+            </motion.div>
+            <p className="text-slate-400 font-medium">Loading your messages...</p>
+          </motion.div>
+        ) : messages.length === 0 ? (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-center py-24"
+          >
+            <motion.div 
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ delay: 0.1 }}
+              className="w-20 h-20 rounded-full bg-gradient-to-br from-purple-500/20 to-teal-500/10 flex items-center justify-center mx-auto mb-6"
+            >
+              <MessageCircle className="w-10 h-10 text-purple-400/40" />
+            </motion.div>
+            <h3 className="text-2xl font-bold mb-3 text-slate-100" style={{ fontFamily: 'Syne' }}>
               No messages yet
             </h3>
-            <p className="text-sm mb-6 text-slate-400">
-              Share your link to start receiving anonymous messages
+            <p className="text-slate-400 mb-8 max-w-sm mx-auto">
+              Share your link to start receiving anonymous messages, confessions, and compliments
             </p>
-            <button
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
               onClick={handleCopyLink}
-              className="inline-flex items-center gap-2 px-6 py-3 bg-linear-to-r from-purple-600 to-purple-500 hover:from-purple-500 hover:to-purple-400 text-white rounded-xl transition-all shadow-lg shadow-purple-600/25 hover:shadow-purple-600/40 font-medium"
+              className="inline-flex items-center gap-2 px-7 py-3 bg-gradient-to-r from-purple-600 to-purple-500 hover:from-purple-500 hover:to-purple-400 text-white rounded-xl transition-all shadow-lg shadow-purple-600/30 hover:shadow-purple-600/50 font-medium"
               style={{ fontFamily: 'Syne' }}
             >
               <Copy className="w-4 h-4" />
               Copy my link
-            </button>
+            </motion.button>
           </motion.div>
         ) : (
-          <motion.div layout className="space-y-3">
+          <motion.div layout className="space-y-4">
             <AnimatePresence initial={false}>
-              {messages.map(msg => (
+              {messages.map((msg, idx) => (
                 <motion.div
                   key={msg._id}
                   layout
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, scale: 0.95, transition: { duration: 0.2 } }}
-                  className={`p-5 rounded-2xl border border-white/5 bg-white/5 backdrop-blur-sm hover:border-purple-400/20 transition-all cursor-pointer ${
-                    msg.isRead ? 'opacity-75' : ''
+                  initial={{ opacity: 0, y: 20, x: -20 }}
+                  animate={{ opacity: 1, y: 0, x: 0 }}
+                  exit={{ opacity: 0, scale: 0.9, x: 100, transition: { duration: 0.2 } }}
+                  transition={{ delay: idx * 0.05 }}
+                  className={`glass-lg p-6 rounded-2xl cursor-pointer group transition-all ${
+                    msg.isRead ? 'opacity-75' : 'border-purple-400/30 shadow-lg shadow-purple-500/10'
                   }`}
                   onClick={() => handleMarkRead(msg)}
+                  whileHover={{ y: -2 }}
                 >
-                  <div className="flex items-start justify-between gap-3">
+                  <div className="flex items-start justify-between gap-4">
                     <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 mb-3 flex-wrap">
+                      <div className="flex items-center gap-3 mb-4 flex-wrap">
                         <span className={`category-chip ${TYPE_CONFIG[msg.type]?.cls}`}>
                           {TYPE_CONFIG[msg.type]?.emoji} {TYPE_CONFIG[msg.type]?.label}
                         </span>
                         {!msg.isRead && (
-                          <span className="inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-400 font-medium">
+                          <motion.span 
+                            initial={{ scale: 0.8, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            className="inline-flex items-center gap-1.5 text-xs px-3 py-1 rounded-full bg-purple-500/20 text-purple-400 font-medium border border-purple-400/30"
+                          >
+                            <div className="w-1.5 h-1.5 rounded-full bg-purple-400 animate-pulse" />
                             New
-                          </span>
+                          </motion.span>
                         )}
                       </div>
-                      <p className="text-base leading-relaxed text-slate-100 break-words">
+                      <p className="text-base leading-relaxed text-slate-100 break-words mb-4">
                         {msg.message}
                       </p>
-                      <p className="text-xs mt-3 text-slate-400">
+                      <p className="text-xs font-medium text-slate-500">
                         {new Date(msg.createdAt).toLocaleDateString('en-US', {
                           month: 'short',
                           day: 'numeric',
@@ -387,21 +461,25 @@ export default function DashboardPage() {
                     </div>
                     <div className="flex flex-col gap-2 flex-shrink-0">
                       {!msg.isRead && (
-                        <button
+                        <motion.button
+                          whileHover={{ scale: 1.1 }}
+                          whileTap={{ scale: 0.9 }}
                           onClick={(e) => { e.stopPropagation(); handleMarkRead(msg); }}
                           title="Mark as read"
-                          className="p-2 rounded-lg bg-purple-500/20 text-purple-400 hover:bg-purple-500/30 transition-all"
+                          className="p-2 rounded-lg bg-purple-500/20 text-purple-400 hover:bg-purple-500/30 border border-purple-400/30 transition-all"
                         >
                           <Eye className="w-4 h-4" />
-                        </button>
+                        </motion.button>
                       )}
-                      <button
+                      <motion.button
+                        whileHover={{ scale: 1.1 }}
+                        whileTap={{ scale: 0.9 }}
                         onClick={(e) => { e.stopPropagation(); handleDelete(msg._id); }}
                         title="Delete"
-                        className="p-2 rounded-lg text-red-400/60 hover:text-red-400 hover:bg-red-400/10 transition-all"
+                        className="p-2 rounded-lg text-red-400/60 hover:text-red-400 hover:bg-red-400/10 border border-transparent hover:border-red-400/20 transition-all"
                       >
                         <Trash2 className="w-4 h-4" />
-                      </button>
+                      </motion.button>
                     </div>
                   </div>
                 </motion.div>

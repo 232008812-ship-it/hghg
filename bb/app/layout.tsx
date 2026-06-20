@@ -1,6 +1,10 @@
 import type { Metadata } from 'next';
+import { Inter, Syne } from 'next/font/google';
 import './globals.css';
 import { AuthProvider } from '@/contexts/AuthContext';
+
+const inter = Inter({ subsets: ['latin'] });
+const syne = Syne({ subsets: ['latin'], variable: '--font-syne' });
 
 export const metadata: Metadata = {
   title: 'GhostNote — Anonymous Messages',
@@ -9,8 +13,8 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
-      <body>
+    <html lang="en" className={`${inter.className} ${syne.variable}`}>
+      <body className="bg-background">
         <AuthProvider>
           {children}
         </AuthProvider>
